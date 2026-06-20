@@ -594,5 +594,14 @@ bot.action(/^admin_rechazar_(\d+)$/, async (ctx) => {
 bot.launch();
 console.log('🤖 Bot iniciado.');
 
+// Servidor HTTP para health checks de Render (evita que el servicio duerma)
+const http = require('http');
+const PORT = process.env.PORT || 3000;
+
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('OK');
+}).listen(PORT, () => console.log(`🌐 Health check escuchando en puerto ${PORT}`));
+
 process.once('SIGINT',  () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
